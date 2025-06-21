@@ -15,7 +15,7 @@ import SecuGen.FDxSDKPro.jni.SGFDxDeviceName;
 import SecuGen.FDxSDKPro.jni.SGFDxSecurityLevel;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("*")
 @RequestMapping("api/fingerprint")
 public class FingerPrintScanner {
 	static String temp = "SO5X0A6qTnaRELIKLd1tgARsDlu5xs9B29KsB/QlXCXjLxlYe/a0tqvOSTwTHFQPlw38Og3mF3Z6fFrjFttk8Upz+oT/Nfzedda+BzW0Sk6kq5AzF/4z6QTa5ui0GfX1N53cusLVi9OWVRlx2D6YRHcSY/DxFWv0f0AQc/mO+eFlLfRt7+5tsTfawfMzcQJpGy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fA==";

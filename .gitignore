@@ -3,11 +3,6 @@
 hs_err_pid*.log
 .DS_Store
 
-# === Node/React Frontend ===
-/frontend/e-voting_biometric-auth/node_modules/
-/frontend/e-voting_biometric-auth/.vite/
-/frontend/e-voting_biometric-auth/dist/
-
 # === Java/Maven Backend ===
 /backend/java/target/
 /backend/java/.classpath
