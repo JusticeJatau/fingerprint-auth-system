@@ -13,6 +13,7 @@ import SecuGen.FDxSDKPro.jni.SGImpressionType;
 public class ScannerService{
 	
 	static OutputHelper helper = new OutputHelper();
+	static long timeout;
 	
 	public static class ScanResult {
 		public byte[] imageBuffer;
@@ -53,14 +54,14 @@ public class ScannerService{
 	public static ScanResult scan(JSGFPLib sgfplib, int m_ImageHeight, int m_ImageWidth, byte[] buffer, long timeout, long quality) {
 		helper.debug("Place your finger on the scanner...");
 		
+		int[] img_qlty = new int[1];
 		long result = sgfplib.GetImageEx(buffer, timeout, 0, quality);					//Get the fingerprint image, perform the scan and store the success result in a variable 0 for success 54 for timeout, then the image in the buffer
-		
+			
 		if(result != SGFDxErrorCode.SGFDX_ERROR_NONE) {									//if timeout output this
 			helper.error("Timeout...");
 			return null;
 		}
 		
-		int[] img_qlty = new int[1];
 		sgfplib.GetImageQuality(m_ImageWidth, m_ImageHeight, buffer, img_qlty);		//Get the scanned image quality
 		
 		if(img_qlty[0] < 80) {

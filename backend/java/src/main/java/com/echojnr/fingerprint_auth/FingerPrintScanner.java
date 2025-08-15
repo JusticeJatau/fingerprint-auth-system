@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.echojnr.utils.OutputHelper;
+
 import SecuGen.FDxSDKPro.jni.JSGFPLib;
 import SecuGen.FDxSDKPro.jni.SGFDxDeviceName;
 import SecuGen.FDxSDKPro.jni.SGFDxSecurityLevel;
@@ -18,20 +20,19 @@ import SecuGen.FDxSDKPro.jni.SGFDxSecurityLevel;
 @CrossOrigin("*")
 @RequestMapping("api/fingerprint")
 public class FingerPrintScanner {
-	static String temp = "SO5X0A6qTnaRELIKLd1tgARsDlu5xs9B29KsB/QlXCXjLxlYe/a0tqvOSTwTHFQPlw38Og3mF3Z6fFrjFttk8Upz+oT/Nfzedda+BzW0Sk6kq5AzF/4z6QTa5ui0GfX1N53cusLVi9OWVRlx2D6YRHcSY/DxFWv0f0AQc/mO+eFlLfRt7+5tsTfawfMzcQJpGy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fBstyeuvDV9gKmT/R/Bs+XwbLcnrrw1fYCpk/0fwbPl8Gy3J668NX2AqZP9H8Gz5fA==";
-
-	
+	static OutputHelper helper = new OutputHelper();
 
 	@GetMapping("/scan")
 	public static Map<String, String> scan(){
 		JSGFPLib sgfplib = new JSGFPLib();
+		
 		ScannerService.ScanResult result = ScannerService.init_scanner(sgfplib);
 		byte[] template = result.templateBuffer;
+		Map<String, String> response = new HashMap<>();
 
 		String encodedTemp = Base64.getEncoder().encodeToString(template);
-		Map<String, String> response = new HashMap<>();
+		response.clear();
 		response.put("template", encodedTemp);
-
 		return response;
 	}
 	
@@ -54,12 +55,12 @@ public class FingerPrintScanner {
 		boolean[] matched = new boolean[1];
 
 		sgfplib.MatchTemplate(decodedTemp1, decodedTemp2, sl, matched);
-
+		
+		helper.colorOutput(helper.GREEN, "Matched", matched[0]);
 		sgfplib.Close();
 
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("matched", true);
+		response.put("matched", matched[0]);
 		return response;
 	}
-
 }

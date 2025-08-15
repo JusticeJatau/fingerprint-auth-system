@@ -4,8 +4,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './components/Home.jsx'
 import Scan from './components/Scan.jsx'
 import Match from './components/Match.jsx'
+import Login from './components/Login.jsx'
+import Signup from './components/Signup.jsx'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Dashboard from './components/Dashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +21,15 @@ const router = createBrowserRouter([
   },{
     path: '/match',
     element: <Match/>
+  },{
+    path: '/login',
+    element: <Login/>
+  },{
+    path: '/signup',
+    element: <Signup/>
+  },{
+    path: '/dashboard',
+    element: <Dashboard/>
   }
 ])
 

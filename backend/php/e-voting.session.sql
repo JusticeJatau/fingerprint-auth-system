@@ -1,0 +1,4 @@
+CREATE TABLE templates(
+    id INT AUTOINCREMENT PRIMARY KEY,
+    
+)

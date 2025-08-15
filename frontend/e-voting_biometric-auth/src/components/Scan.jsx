@@ -1,5 +1,6 @@
 import { Button } from 'bootstrap'
 import React, { useState } from 'react'
+import './Scan.css'
 
 const Scan = () => {
   const [template, setTemplate] = useState('');
@@ -11,6 +12,7 @@ const Scan = () => {
   
     setTemplate(data.template);
     console.log(data);
+    console.log(template.length)
   }
   const matchfingerprint = async()=>{
     const encodedTemp = encodeURIComponent(template);
@@ -22,7 +24,7 @@ const Scan = () => {
   }
 
   return (
-    <div>
+    <div className='scan'>
       <button onClick={scanfingerprint} value="Click to scan">Click to scan</button>
       <button onClick={matchfingerprint} value="Click to scan">Click to match</button>
     </div>
