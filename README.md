@@ -14,9 +14,9 @@ This is a complete Guide on how to setup the project with the Secugen Hamster Pl
 
 1. ## Download
 
--  Download and Install the Java 2 SDK v1.8.0_51 [here] (https://www.oracle.com/technetwork/java)
+-  Download and Install the Java 2 SDK v1.8.0_51 [here](https://www.oracle.com/technetwork/java)
 - Download the Secugen Windows driver [here](https://www.dropbox.com/t/w8kk93pfWRiMWF1Z) and install
-- Download the Secugen FDxSDK Pro for Windows. Go to (this link)[https://secugen.com/request-free-software/] and check on the FDxSDK Pro for Windows option, fill in your details in the field below and click on submit and a download link will sent to your email
+- Download the Secugen FDxSDK Pro for Windows. Got to [here](https://secugen.com/request-free-software/) and check on the FDxSDK Pro for Windows option, fill in your details in the field below and click on submit and a download link will sent to your email
 - Open the link from your email and download the SDK
 - Extract the FDxSDK Pro for Windows to a separate folder.
 
