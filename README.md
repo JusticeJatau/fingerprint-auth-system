@@ -74,3 +74,45 @@ This is a complete Guide on how to setup the project with the Secugen Hamster Pl
 		</dependency>
     ```
 - Run `mvn spring-boot:run` in the terminal to start the java  springboot project
+
+
+## Endpoints
+
+**The java endpoint is available over the `localhost:8080` port**
+***Below are the endpoints via the `8080` port***
+- **scan:** `/api/fingerprint/scan`
+- **match:** `/fingerprint/scan`
+
+# How to use
+To run and use the project
+- Plug in the scanner
+- Open the frontend and run it `npm run dev`
+- Open the backend and run it `mvn spring-boot:run`
+- Write a simple fetch request or use the existing one in the project 
+    js ```
+        const scan = async(e)=>{
+            const res = await fetch("http://localhost:8080/api/fingerprint/scan");
+            const data = await res.json();
+            console.log(data)
+        }
+    ```
+    to scan and
+    js ```
+        const match = async()=>{
+            const encodedTemp1 = encodeURIComponent(template1);
+            const encodedTemp2 = encodeURIComponent(template2);
+            const res = await fetch(`http://localhost:8080/api/fingerprint/match?template1=${encodedTemp1}&template2=${encodedTemp2}`);
+            const data = await res.json();
+            
+            setMatched(data.matched)
+            console.log(data);
+        }
+    ```
+
+> 💡 **Note:** The match function pass in two template in the url one fetched from the databas and second front the user and send it to the java backend to match and return a `true` or `false` if matched
+
+## Addition
+This project comes with a `PHP` backend that can be used just follow the setup
+
+*Run the following SQL queries via XAMPP*
+- 
