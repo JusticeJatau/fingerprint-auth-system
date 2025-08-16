@@ -93,6 +93,7 @@ To run and use the project
         const scan = async(e)=>{
             const res = await fetch("http://localhost:8080/api/fingerprint/scan");
             const data = await res.json();
+            
             console.log(data)
         }
     ```
@@ -103,7 +104,6 @@ To run and use the project
             const res = await fetch(`http://localhost:8080/api/fingerprint/match?template1=${encodedTemp1}&template2=${encodedTemp2}`);
             const data = await res.json();
             
-            setMatched(data.matched)
             console.log(data);
         }
     ```
