@@ -53,12 +53,12 @@ This is a complete Guide on how to setup the project with the Secugen Hamster Pl
   -Dpackaging=jar
 ```
 - Edit the ```pom.xml``` file
-    ```
+    ```xml
         <properties>
             <java.version>1.8</java.version>
         </properties>
     ```
-    ```
+    ```xml
         <parent>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-parent</artifactId>
@@ -66,7 +66,7 @@ This is a complete Guide on how to setup the project with the Secugen Hamster Pl
             <relativePath/> <!-- lookup parent from repository -->
         </parent>
     ```
-    ```
+    ```xml
         <dependency>
 			<groupId>com.secugen</groupId>
 			<artifactId>fdx-sdk-pro</artifactId>
@@ -81,7 +81,7 @@ This is a complete Guide on how to setup the project with the Secugen Hamster Pl
 **The java endpoint is available over the `localhost:8080` port**
 ***Below are the endpoints via the `8080` port***
 - **scan:** `/api/fingerprint/scan`
-- **match:** `/fingerprint/scan`
+- **match:** `/api/fingerprint/match`
 
 # How to use
 To run and use the project
@@ -89,15 +89,14 @@ To run and use the project
 - Open the frontend and run it `npm run dev`
 - Open the backend and run it `mvn spring-boot:run`
 - Write a simple fetch request or use the existing one in the project 
-    js ```
+    ```javascript
         const scan = async(e)=>{
             const res = await fetch("http://localhost:8080/api/fingerprint/scan");
             const data = await res.json();
             console.log(data)
         }
     ```
-    to scan and
-    js ```
+    ```javascript
         const match = async()=>{
             const encodedTemp1 = encodeURIComponent(template1);
             const encodedTemp2 = encodeURIComponent(template2);
@@ -114,5 +113,34 @@ To run and use the project
 ## Addition
 This project comes with a `PHP` backend that can be used just follow the setup
 
-*Run the following SQL queries via XAMPP*
-- 
+- Navigate the `PHP` directory in the backend
+- open the `config` folder and setup your database details there
+
+*Run XAMPP*
+- Create Database and name it **`evoting`**
+
+*Run the following SQL queries*
+
+- Create User Table
+    ```sql
+        CREATE TABLE users(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            f_name VARCHAR(15) NOT NULL,
+            l_name VARCHAR(15) NOT NULL,
+            email VARCHAR(20) NOT NULL,
+            password VARCHAR(20) NOT NULL
+        )
+    ```
+- Create Biometric Table
+    ```sql
+        CREATE TABLE biometric(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            template VARCHAR(540) NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    ```
+
+This is pretty much it for the setup. If further assitance is needed you can reach me
+- Via [WhatsApp](https://wa.me/2349122241964)
+- Via [Email](jataujustice200@gmail.com)
