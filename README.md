@@ -143,4 +143,4 @@ This project comes with a `PHP` backend that can be used just follow the setup
 
 This is pretty much it for the setup. If further assitance is needed you can reach me
 - Via [WhatsApp](https://wa.me/2349122241964)
-- Via [Email](jataujustice200@gmail.com)
+- Via [Email](mailto:jataujustice200@gmail.com)
