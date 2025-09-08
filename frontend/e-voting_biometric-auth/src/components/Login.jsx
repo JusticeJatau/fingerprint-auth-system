@@ -2,6 +2,7 @@ import {useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import Modal from './Others/Modal';
+import Prompt from './Prompt';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const Login = () => {
   const [matched, setMatched] = useState();
   const [step, setStep] = useState(1);
   const [fpColor, setFPColor] = useState("#2e2e2e");
+  const [prompt, setPrompt] = useState();
   const [isBiometric, setIsBiometric] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [statusMessage, setStatusMessage] = useState("Click start to begin");
@@ -32,6 +34,12 @@ const Login = () => {
     success: "Fingerprint captured successfully",
     failed: "Failed to capture check your device",
     timeout: "Scanner timeout..."
+  }
+
+  const promptMessages = {
+    wrongpass: "Incorrect password or email",
+    wrongbio: "Fingerprint miss-match",
+    success: "Login successful"
   }
 
   const handleChange = (e)=>{
@@ -100,6 +108,11 @@ const Login = () => {
     const data = await res.json();
     
     setMatched(data.matched)
+    if(matched){
+      setPrompt(promptMessages.success)
+    }else{
+      setPrompt(promptMessages.wrongbio)
+    }
     console.log(data);
   }
 
@@ -128,7 +141,7 @@ const Login = () => {
     if(data.template)
       setTemplate(data.template)
     if(data.status == false){
-      console.log(data)
+      setPrompt(promptMessages.wrongpass)
       return;
     }
 
@@ -137,6 +150,7 @@ const Login = () => {
     if(isBiometric){
       match()
     }else{
+      setPrompt(promptMessages.success)
       navigate("/dashboard")
     }
   }
@@ -158,6 +172,7 @@ const Login = () => {
 
   return (
     <div className="container my-5">
+      <Prompt message={prompt}/>
       <div className="row justify-content-center">
         <div className="col-12 col-sm-10 col-md-6 col-lg-4">
           <div className="card shadow-sm rounded">

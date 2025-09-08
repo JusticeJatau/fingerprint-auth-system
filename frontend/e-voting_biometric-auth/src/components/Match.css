@@ -1,0 +1,30 @@
+.prompt{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    color: #fff;
+    font-weight: 500;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #d4d42e;
+    width: 80%;
+    opacity: 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,.3);
+    z-index: 1;
+    animation: animate 5s;
+}
+
+@keyframes animate {
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}

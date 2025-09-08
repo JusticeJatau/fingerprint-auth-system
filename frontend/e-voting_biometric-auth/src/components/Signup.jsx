@@ -7,9 +7,11 @@ import Modal from './Others/Modal';
 const Signup = () => {
   const [template, setTemplate] = useState();
   const [fpColor, setFPColor] = useState("#2e2e2e");
+  const [matched, setMatched] = useState();
   const [step, setStep] = useState(1);
   const [statusMessage, setStatusMessage] = useState("Click start to begin");
-  const maxStep = 2;
+  const [hasStarted, setHasStarted] = useState(false);
+  const maxStep = 3;
 
   const colors = {
     green: "#18ec18",
@@ -18,12 +20,21 @@ const Signup = () => {
     black: "#2e2e2e"
   }
 
+  const status = {
+    start: "Click start to begin",
+    clicked: "Place your finger on the sensor to register fingerprint",
+    success: "Fingerprint captured successfully",
+    failed: "Failed to capture check your device",
+    timeout: "Scanner timeout..."
+  }
+
   const [formData, setFormData] = useState({
     f_name: '',
     l_name:'',
     email:'',
     password:'',
-    template:''
+    template:'',
+    template2:''
   });
 
   const handleChange = (e)=>{
@@ -36,36 +47,70 @@ const Signup = () => {
   const scan = async(e)=>{
     e.preventDefault();
     setFPColor(colors.blue)
+    setStatusMessage(status.clicked);
+    setHasStarted(true)
 
-    const res = await fetch("http://localhost:8080/api/fingerprint/scan");
-    const data = await res.json();
     let timeout;
     clearTimeout(timeout)
-  
-    if(data.template == '' || data.template == null){
-      setFPColor(colors.red)
-      timeout = setTimeout(()=>{
-        setFPColor(colors.black)
-      }, 1000)
-    }else{
-      setFormData((prev)=>({
-        ...prev,
-        "template":data.template
-      }));
-
-      setFPColor(colors.green);
-
-      timeout = setTimeout(()=>{
-        document.getElementById('closeModal').click();
-
-        const myModalEl = document.getElementById("fingerprintModal")
-
-        myModalEl.addEventListener('hidden.bs.modal', ()=>{
+    try{
+      const res = await fetch("http://localhost:8080/api/fingerprint/scan");
+      const data = await res.json();
+    
+      if(data.template == '' || data.template == null){
+        setFPColor(colors.red)
+        setStatusMessage(status.timeout)
+        timeout = setTimeout(()=>{
           setFPColor(colors.black)
           setStatusMessage(status.start)
-        })
+        }, 1000)
+      }else{
+        formData.template != '' ? (
+          setFormData((prev)=>({
+            ...prev,
+            "template2":data.template
+          }))
+        ):(
+          setFormData((prev)=>({
+            ...prev,
+            "template":data.template
+          }))
+        )
+
+        setFPColor(colors.green);
+        setStatusMessage(status.success)
+        
+        timeout = setTimeout(()=>{
+          document.getElementById('closeModal').click();
+
+          const myModalEl = document.getElementById("fingerprintModal")
+
+          myModalEl.addEventListener('hidden.bs.modal', ()=>{
+            setFPColor(colors.black)
+            setStatusMessage(status.start)
+          })
+        }, 1000)
+      }
+      
+    }catch(err){
+      setFPColor(colors.red)
+      setStatusMessage(status.failed)
+      timeout = setTimeout(()=>{
+        setFPColor(colors.black)
+        setStatusMessage(status.start)
       }, 1000)
+      console.warn(err + " Check your connection")
     }
+    setHasStarted(false)
+  }
+
+  const match = async()=>{
+    const encodedTemp1 = encodeURIComponent(formData.template);
+    const encodedTemp2 = encodeURIComponent(formData.template2);
+    const res = await fetch(`http://localhost:8080/api/fingerprint/match?template1=${encodedTemp1}&template2=${encodedTemp2}`);
+    const data = await res.json();
+    
+    setMatched(data.matched)
+    console.log(data);
   }
 
   const signup = async(e)=>{
@@ -94,10 +139,30 @@ const Signup = () => {
     console.log("Hi")
   }
 
+  const handleClear = ()=>{
+    console.log("Cleared")
+    setMatched(null)
+
+    setFormData((prev)=>({
+      ...prev,
+      "template":''
+    }))
+    setFormData((prev)=>({
+      ...prev,
+      "template2":''
+    }));
+  }
+
   const handleNext = ()=>{
     if(step === 1 && (!formData.f_name || !formData.l_name || !formData.email || !formData.password)){
       alert("please fill in all required fields")
       return;
+    }
+    if(step === 2 && (!formData.template || !formData.template2)){
+      alert("please complete adding fingerprints")
+      return;
+    }else if(step === 2){
+      match()
     }
 
     setStep(step + 1)
@@ -114,7 +179,7 @@ const Signup = () => {
           <div className="card shadow-sm rounded">
             <div className="card-body">
               <h3 className="mb-4 text-center">Create Account</h3>
-              <h4 className="mb-4 text-center fs-5">Step {step} of 2</h4>
+              <h4 className="mb-4 text-center fs-5">Step {step} of 3</h4>
               <form onSubmit={handleSubmit}>
                 {
                   step === 1 && (
@@ -191,25 +256,52 @@ const Signup = () => {
                           id='template'
                           name='template'
                           value={formData.template}
+                          onChange={handleChange}
                           style={{
                             display:'none'
                           }}
                           required
                         />
                         <button 
-                        type='button' 
-                        className='mx-auto btn btn-primary' 
-                        data-bs-toggle="modal" 
-                        data-bs-target='#fingerprintModal'
-                      >
+                          type='button' 
+                          className='mx-auto btn btn-primary' 
+                          data-bs-toggle="modal" 
+                          data-bs-target='#fingerprintModal'
+                          disabled={formData.template2? true:false}
+                        >
+                          {
+                            formData.template == ''? ('Scan Fingerprint'):('Scan again')
+                          }
+                        </button>
                         {
-                          formData.template == ''? ('Scan Fingerprint'):('Scan again')
+                          formData.template && (
+                            <button 
+                              type='button'
+                              className="btn btn-outline-secondary btn-sm mt-3 mx-4 py-2"
+                              onClick={handleClear}
+                            >
+                              Clear
+                            </button>
+                          )
                         }
-                      </button>
                       </div>
                       <Modal fpColor={fpColor} statusMessage={statusMessage} hasStarted={hasStarted} scan={scan}/>
                     </>
                   )
+                }
+                {
+                  step === 3 && (
+                    <div className='text-center'>
+                      {
+                        (matched === true || matched === false)?(
+                              matched? "Fingerprint matched":"Fingerprint does not match."
+                        ):(
+                          "Comparing Fingerprint..."
+                        )
+                      }
+                    </div>
+                  )
+                  
                 }
                 <div className="my-4 d-flex justify-content-between">
                   {step > 1 && (
@@ -221,7 +313,7 @@ const Signup = () => {
                       Back
                     </button>
                   )}
-                  {step < 2 && (
+                  {step <  3 && (
                     <button 
                       type="button" 
                       className="btn btn-outline-secondary ms-auto"
@@ -237,7 +329,7 @@ const Signup = () => {
                   className="btn btn-primary w-100" 
                   onClick={signup}
                   disabled={
-                    (step == maxStep && formData.template != '')?false:true
+                    (step == maxStep && formData.template != '' && matched !== false)?false:true
                   }
                 >
                   Sign Up
